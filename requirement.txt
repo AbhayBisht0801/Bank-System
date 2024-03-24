@@ -1,0 +1,8 @@
+langchain-google-genai
+langchain
+streamlit
+pandas 
+numpy
+python-dotenv
+tk
+sqlite3 
