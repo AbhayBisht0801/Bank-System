@@ -13,7 +13,7 @@ def main():
     option = message1.radio("Choose an option:", ("Bank Balance", "Credit Score", "Insurance Settlement"))
 
     if option == "Bank Balance":
-        st.info("Tenzin lodu")
+        st.info("no Information")
     elif option == "Credit Score":
         st.info("Here's information about credit score...")
     elif option == "Insurance Settlement":

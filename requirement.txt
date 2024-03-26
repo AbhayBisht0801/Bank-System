@@ -14,4 +14,5 @@ python-box==6.0.2
 gdown
 joblib
 scikit-learn
+keras
 -e .
