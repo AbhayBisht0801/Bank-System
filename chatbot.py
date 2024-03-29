@@ -51,7 +51,7 @@ def app():
             data = cur.fetchall()
             conn.close()
             data1 = list(data[0])
-            indexs = [0, 1, 2, 3, 11]
+            indexs = [0, 1, 2, 3,4, 11]
             data1 = [value for index, value in enumerate(data1) if index not in indexs]
             pred_data = pd.DataFrame([data1], columns=['Age', 'Income', 'Education', 'Number of Children', 'Gender', 'Marital Status', 'Home Ownership'])
             pred_data.replace({'Male': True, 'Female': False, 'Single': True, 'Married': False, 'Owned': False, 'Rented': True}, inplace=True)
