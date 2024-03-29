@@ -1,8 +1,8 @@
 import streamlit as st
 import sqlite3 
-from dotenv import load_dotenv
-from langchain_community.utilities import sql_database
-load_dotenv()
+
+
+
 conn=sqlite3.connect('customer.db')
 c=conn.cursor()
 
@@ -13,10 +13,12 @@ password = st.text_input('Password', type='password')  # Use type='password' to 
 
 if st.button('Login'):
     if user_name !='' and password!='':
-        c.execute('SELECT * FROM customer WHERE username=? AND password=?', (user_name, password))
+        c.execute('SELECT * FROM Customer WHERE username=? AND password=?', (user_name, password))
         conn.commit()
         data=c.fetchall()
         if len(data)>0:
+            st.session_state['user_name'] = user_name
+            st.session_state['password']=password
             st.success('Login Successfull')
         else:
             st.error('No user Exist')
@@ -25,4 +27,3 @@ else:
     st.error('Please enter your details')
 conn.close()
 
-        
