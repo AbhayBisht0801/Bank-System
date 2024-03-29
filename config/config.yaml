@@ -12,3 +12,9 @@ prepare_base_model:
   root_dir: artifacts/prepare_base_model
   base_model_path: artifacts/prepare_base_model/base_model.h5
   updated_base_model_path: artifacts/prepare_base_model/base_model_updated.h5
+
+training:
+  root_dir: artifacts/training
+  cnn_trained_model_path: artifacts/training/model.h5
+  credit_score_model: artifacts/training/creditscore_model.pkl
+  transaction_model: artifacts/training/transaction_model.pkl

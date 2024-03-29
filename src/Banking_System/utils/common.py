@@ -14,7 +14,7 @@ import pickle
 import numpy as np
 from numpy.linalg import norm
 from keras.applications.resnet import preprocess_input
-
+from sklearn.metrics import f1_score
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
@@ -158,3 +158,25 @@ def decodeImage(imgstring, fileName):
 def encodeImageIntoBase64(croppedImagePath):
     with open(croppedImagePath, "rb") as f:
         return base64.b64encode(f.read())
+    
+def evaluate_model(X_train,y_train,y_test,X_test,models):
+    try:
+        report={}
+        for i in range(len(list(models))):
+            model=list(models.values())[i]
+            model.fit(X_train,y_train)
+            y_train_pred=model.predict(X_train)
+            y_test_pred=model.predict(X_test)
+            train_model_score=f1_score(y_train,y_train_pred,average='weighted')
+            test_model_score=f1_score(y_test,y_test_pred,average='weighted')
+            report[list(models.keys())[i]]=test_model_score
+        return report
+    except Exception as e:
+        raise e
+def model_prediction(img,model):
+    img=img.resize((256,256))
+    img_array = img.convert('RGB')
+    img_array = np.array(img_array)
+    img=np.expand_dims(img_array,axis=0)  
+    prediction=model.predict(img)
+    return prediction

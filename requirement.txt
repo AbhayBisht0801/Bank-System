@@ -14,5 +14,11 @@ python-box==6.0.2
 gdown
 joblib
 scikit-learn
+google-generativeai
 keras
+xgboost
+streamlit_option_menu
+pytesseract
+pillow
+keras-ocr
 -e .
