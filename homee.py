@@ -3,7 +3,7 @@ from PIL import Image
 img = Image.open('a12.png')
 st.set_page_config(page_title="Mallya National Banks", page_icon=img,initial_sidebar_state="auto",)
 st.image(img,use_column_width=False)
-def app():
+def main():
     st.markdown("# **<u><center>Mallya National Banks: Empowering Your Financial Future</center></u>**", unsafe_allow_html=True)
     st.markdown("---")
     st.markdown("""
@@ -61,4 +61,4 @@ def app():
     """)
 
 if __name__ == "__main__":
-    app()
+    main()
