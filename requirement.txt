@@ -20,5 +20,6 @@ xgboost
 streamlit_option_menu
 pytesseract
 pillow
-keras-ocr
+PyPDF2
+faiss-cpu
 -e .

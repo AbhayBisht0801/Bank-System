@@ -2,6 +2,7 @@ from src.Banking_System.constants import *
 from src.Banking_System.utils.common import read_yaml,create_directories
 from src.Banking_System.entity.configentity import DataIngestionConfig
 from src.Banking_System.entity.configentity import PrepareBaseModelConfig
+from src.Banking_System.entity.configentity import TrainingConfig
 class ConfigurationManager:
     def __init__(
             self,
@@ -37,3 +38,33 @@ class ConfigurationManager:
             params_classes=self.params.CLASSES,
             params_dropout=self.params.DROPOUT)
         return prepare_base_model_config
+
+    def get_training_config(self) -> TrainingConfig:
+        training = self.config.training
+        prepare_base_model = self.config.prepare_base_model
+        params = self.params
+        training_data = os.path.join(self.config.data_ingestion.unzip_dir,'data\\train')
+        transaction_dir=self.config.data_ingestion.transaction_dir
+        credit_score_dir=self.config.data_ingestion.credit_score_dir
+        
+        create_directories([
+            Path(training.root_dir)
+        ])
+
+        training_config = TrainingConfig(
+            root_dir=Path(training.root_dir),
+            cnn_trained_model_path=Path(training.cnn_trained_model_path),
+            updated_base_model_path=Path(prepare_base_model.updated_base_model_path),
+            training_data=Path(training_data),
+            params_epochs=params.EPOCHS,
+            params_batch_size=params.BATCH_SIZE,
+            params_is_augmentation=params.AUGMENTATION,
+            params_image_size=params.IMAGE_SIZE,
+            credit_score_model=Path(training.credit_score_model),
+            transaction_model=Path(training.transaction_model),
+            credit_score_dir=Path(credit_score_dir),
+            transaction_dir=Path(transaction_dir)
+
+        )
+
+        return training_config

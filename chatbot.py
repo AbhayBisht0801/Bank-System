@@ -34,7 +34,7 @@ def app():
         option = message1.radio("Choose an option:", ("Bank Balance", "Credit Score", "Insurance Settlement","Other"))
 
         if option == "Bank Balance":
-            conn = sqlite3.connect('customer_data.db')
+            conn = sqlite3.connect('customer_database.db')
             cur = conn.cursor()
             cur.execute('SELECT Balance FROM Customer WHERE username=? AND password=?', (user_name, password))
             conn.commit()
@@ -44,16 +44,17 @@ def app():
             conn.close()
             
         elif option == "Credit Score":
-            conn = sqlite3.connect('customer_data.db')
+            conn = sqlite3.connect('customer_database.db')
             cur = conn.cursor()
             cur.execute('SELECT * FROM Customer WHERE username=? AND password=?', (user_name, password))
             conn.commit()
             data = cur.fetchall()
             conn.close()
             data1 = list(data[0])
-            indexs = [0, 1, 2, 3,4, 11]
+            indexs = [0, 1, 2, 3,4, 12]
             data1 = [value for index, value in enumerate(data1) if index not in indexs]
-            pred_data = pd.DataFrame([data1], columns=['Age', 'Income', 'Education', 'Number of Children', 'Gender', 'Marital Status', 'Home Ownership'])
+
+            pred_data = pd.DataFrame([data1], columns=['Age','Gender', 'Income', 'Education','Marital Status', 'Number of Children', 'Home Ownership'])
             pred_data.replace({'Male': True, 'Female': False, 'Single': True, 'Married': False, 'Owned': False, 'Rented': True}, inplace=True)
             oe = OrdinalEncoder(categories=[['High School Diploma', "Associate's Degree", "Bachelor's Degree", "Master's Degree", 'Doctorate']])
             pred_data['Education'] = oe.fit_transform(pred_data[['Education']])
@@ -74,8 +75,8 @@ def app():
                 for key, value in a.items():
                     if value == prediction[0]:
                         damage=key
-                response=get_gemini_response(prompt[0],f'Does Customer with username  {user_name} and password {password} have a insurance in Insurance Table if yes then check and does that insurance  cover the {damage}.show two boolean value one does a person have car insurance and other is does it cover the {damage} in InsuranceType')
-                data=read_sql_query(response,'customer_data.db')
+                response=get_gemini_response(prompt[0],f'Does Customer with username  {user_name} and password {password} have a insurance in Insurance Table if yes then check and does that insurance  cover the {damage} from InsuranceType Table .show two boolean value one does a person have car insurance and other is does it cover the {damage} in InsuranceType')
+                data=read_sql_query(response,'customer_database.db')
                 if data[0][0]==0:
                     st.warning('Sir/Madam you dont have a Car Insurance')
                 elif data[0][0]==1:

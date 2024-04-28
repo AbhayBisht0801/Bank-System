@@ -28,7 +28,7 @@ def process_login(user_name, password, c, conn):
         st.error('Please enter your details')
 
 def app():
-    conn = sqlite3.connect('customer_data.db')
+    conn = sqlite3.connect('customer_database.db')
     c = conn.cursor()
 
     st.header('Input Your Details')

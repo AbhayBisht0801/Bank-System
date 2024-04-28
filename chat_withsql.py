@@ -25,6 +25,7 @@ prompt=["""Your are an expert in Converting English question to SQL query!
         \nExample 1 - Tell me the number of Customer in Customer table?, 
     the SQL command will be something like this SELECT count(*) FROM Customer; 
     also the sql code should not have ``` in beginning or end and sql word in output
+        
  """]
 
 
