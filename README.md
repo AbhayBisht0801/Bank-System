@@ -6,9 +6,9 @@ Bank System is a comprehensive banking solution that integrates various features
 
 ## Features
 
-### Loan Chatbot
+### Loan Chatbot with Pdf
 
-The loan chatbot assists users in exploring loan options, providing information about interest rates, loan terms, and eligibility criteria. It utilizes Langchain integration to facilitate natural language understanding and responses.
+The loan chatbot assists users in navigating through loan-related queries efficiently. Utilizing Langchain's capabilities, it breaks down PDF documents into manageable chunks of data and employs vector similarity to extract relevant answers based on user questions. This innovative approach enhances user interaction and comprehension, making the loan application process seamless and user-friendly.
 
 ### Insurance Claim Chatbot
 
@@ -30,11 +30,10 @@ Transactions made through Bank System are monitored in real-time using a fraud d
 - Convolutional Neural Networks (CNN) for damage detection in insurance claims
 - SQL database for storing user information and insurance data
 - Fraud detection model for real-time transaction monitoring
-- PDF source integration for document management
 
 ## Usage
 
-1. Clone the repository: `git clone https://github.com/yourusername/bank-system.git`
+1. Clone the repository: `git clone https://github.com/AbhayBisht0801/Bank-System.git`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the application: `python multipage.py`
 4. Access the Bank System through your web browser.
