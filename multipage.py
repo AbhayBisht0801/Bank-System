@@ -3,6 +3,8 @@ from streamlit_option_menu import option_menu
 import loginpage
 import chatbot
 import homee
+import bankingsys
+import loanchatbot
 
 
 class MultiApp:
@@ -19,8 +21,8 @@ class MultiApp:
         with st.sidebar:        
             app = option_menu(
                 menu_title='Menu ',
-                options=['Home','Login','Chatbot'],
-                icons=['Home','login','chatbot'],
+                options=['Home','Login','Chatbot','Transaction','loan chatbot'],
+                icons=['Home','login','chatbot','Transaction',"loan chatbot"],
                 menu_icon='menu-button',
                 default_index=0,
                 styles={
@@ -37,6 +39,10 @@ class MultiApp:
             loginpage.app()
         elif app == "Chatbot":
             chatbot.app()
+        elif app =='Transaction':
+            bankingsys.app()
+        elif app == 'loan chatbot':
+            loanchatbot.app()
        
 
 if __name__ == "__main__":

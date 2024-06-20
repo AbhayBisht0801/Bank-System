@@ -22,4 +22,5 @@ pytesseract
 pillow
 PyPDF2
 faiss-cpu
+emoji
 -e .

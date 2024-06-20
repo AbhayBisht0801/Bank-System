@@ -11,9 +11,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate,ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-
 load_dotenv()
-
 def get_pdf_text(pdf_docs):
     text=""
     for pdf in pdf_docs:
@@ -31,9 +29,10 @@ def get_text_chunks(text):
 
 
 def get_vector_store(text_chunks):
-    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
-    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    vector_store.save_local("faiss_index")
+    if os.path.exists('faiss_index'):
+        embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+        vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
+        vector_store.save_local("faiss_index")
    
 
 
@@ -73,33 +72,41 @@ def user_input(user_question):
 
     
     return response["output_text"]
+def app():
+    pdf_docs=['Home Loan Information.pdf']
+    if os.path.isdir('faiss_index')==False:
+        raw_text = get_pdf_text(pdf_docs)
+        text_chunk=get_text_chunks(raw_text)
 
-pdf_docs=['Home loan.pdf']
-raw_text = get_pdf_text(pdf_docs)
-text_chunk=get_text_chunks(raw_text)
+        get_vector_store(text_chunk)
 
-get_vector_store(text_chunk)
 
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-st.set_page_config(page_title='Bank Stream')
-st.title('Insurance ChatBot')
-for message in st.session_state.chat_history:
-    if isinstance(message,HumanMessage):
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+        initial_message = AIMessage("Hi, how can I help you?")
+        st.session_state.chat_history.append(initial_message)
+
+    st.title('Insurance ChatBot')
+
+    for message in st.session_state.chat_history:
+        if isinstance(message, HumanMessage):
+            with st.chat_message('Human'):
+                st.markdown(message.content)
+        else:
+            with st.chat_message('AI'):
+                st.markdown(message.content)
+
+    user_query = st.chat_input('Your message')
+    if user_query:
+        st.session_state.chat_history.append(HumanMessage(user_query))
         with st.chat_message('Human'):
-            st.markdown(message.content)
-    else:
+            st.markdown(user_query)
+
+        ai_response = user_input(user_query)
         with st.chat_message('AI'):
-            st.markdown(message.content)
-# get response
-user_query=st.chat_input('Your message')
-if user_query is not None:
-    st.session_state.chat_history.append(HumanMessage(user_query))
-    with st.chat_message('Human'):
-        st.markdown(user_query)
-    with st.chat_message('AI'):
-        ai_response=user_input(user_query)
-        st.markdown(ai_response)
-    st.session_state.chat_history.append(AIMessage(ai_response))
+            st.markdown(ai_response)
 
+        st.session_state.chat_history.append(AIMessage(ai_response))
 
+if __name__ == '__main__':
+    app()
