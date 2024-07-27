@@ -2,6 +2,8 @@ import streamlit as st
 import sqlite3 
 from dotenv import load_dotenv
 from langchain_community.utilities import sql_database
+import mysql.connector
+from mysql.connector import Error
 
 load_dotenv()
 if 'user_name' not in st.session_state:
@@ -9,10 +11,10 @@ if 'user_name' not in st.session_state:
 if 'password' not in st.session_state:
     st.session_state['password'] = ''
 
-def process_login(user_name, password, c, conn):
+def process_login(user_name, password, c,conn):
     if user_name != '' and password != '':
         c.execute('SELECT * FROM Customer WHERE username=? AND password=?', (user_name, password))
-        conn.commit()
+        
         data = c.fetchall()
         conn.close()
         if len(data) > 0:

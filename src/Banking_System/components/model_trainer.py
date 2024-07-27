@@ -2,10 +2,17 @@ import os
 import urllib.request as request
 import zipfile
 import gdown
+import pandas as pd
 from src.Banking_System import logger
 from src.Banking_System.utils.common import get_size
 from src.Banking_System.config.configuration import TrainingConfig
 import tensorflow as tf
+from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
+from sklearn.svm import SVC
+from xgboost import XGBClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+from src.Banking_System.utils.common import evaluate_model_transaction,save_object,evaluate_model_creditscore
 class Training:
     def __init__(self, config: TrainingConfig):
         self.config = config
@@ -99,7 +106,7 @@ class Training:
                 'SVC':SVC(),
                 'XGBClassifier':XGBClassifier()
             }
-            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
+            model_report:dict=evaluate_model_transaction(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
             best_model_score=max(sorted(model_report.values()))
             best_model_name=list(model_report.keys())[
                 list(model_report.values()).index(best_model_score)
@@ -131,7 +138,7 @@ class Training:
                 'SVC':SVC(),
                 'XGBClassifier':XGBClassifier()
             }
-            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
+            model_report:dict=evaluate_model_creditscore(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
             best_model_score=max(sorted(model_report.values()))
             best_model_name=list(model_report.keys())[
                 list(model_report.values()).index(best_model_score)

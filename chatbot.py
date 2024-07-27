@@ -15,7 +15,7 @@ credit_score=load_object('artifacts\\training\creditscore_model.pkl')
 label_encoder=load_object('artifacts\data_ingestion\preprocess\encodelabelcredit.pkl')
 ordinal_encoder=load_object
 
-labels=a={'crack': 0,
+labels={'crack': 0,
  'dent': 1,
  'glass shatter': 2,
  'lamp broken': 3,
@@ -36,19 +36,17 @@ def app():
         if option == "Bank Balance":
             conn = sqlite3.connect('customer_database.db')
             cur = conn.cursor()
-            cur.execute('SELECT Balance FROM Customer WHERE username=? AND password=?', (user_name, password))
-            conn.commit()
-            data=cur.fetchall()
+            result=cur.execute('SELECT Balance FROM Customer WHERE username=? AND password=?', (user_name, password))
+            data=result.fetchall()
             balance = data
-            st.write('The Balance in your Account is {}'.format(balance))
+            st.write('The Balance in your Account is {}'.format(balance[0][0]))
             conn.close()
             
         elif option == "Credit Score":
             conn = sqlite3.connect('customer_database.db')
             cur = conn.cursor()
-            cur.execute('SELECT * FROM Customer WHERE username=? AND password=?', (user_name, password))
-            conn.commit()
-            data = cur.fetchall()
+            result=cur.execute('SELECT * FROM Customer WHERE username=? AND password=?', (user_name, password))
+            data = result.fetchall()
             conn.close()
             data1 = list(data[0])
             indexs = [0, 1, 2, 3,4, 12]
@@ -66,17 +64,19 @@ def app():
             st.write('Your credit score is {}'.format(label_encoder.inverse_transform(prediction)[0]))
             
         elif option == "Insurance Settlement":
+            conn = sqlite3.connect('customer_database.db')
+            cur = conn.cursor()
             Car_damage_image = st.file_uploader('Upload Car damage image', type=['jpg', 'png'])
             if Car_damage_image:
                 img = Image.open(Car_damage_image)
                 prediction = np.argmax(model_prediction(img, cnn_model),axis=1)
                 
                 damage=None
-                for key, value in a.items():
+                for key, value in labels.items():
                     if value == prediction[0]:
                         damage=key
                 response=get_gemini_response(prompt[0],f'Does Customer with username  {user_name} and password {password} have a insurance in Insurance Table if yes then check and does that insurance  cover the {damage} from InsuranceType Table .show two boolean value one does a person have car insurance and other is does it cover the {damage} in InsuranceType')
-                data=read_sql_query(response,'customer_database.db')
+                data=read_sql_query(response,conn)
                 if data[0][0]==0:
                     st.warning('Sir/Madam you dont have a Car Insurance')
                 elif data[0][0]==1:

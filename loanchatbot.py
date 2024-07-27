@@ -73,40 +73,45 @@ def user_input(user_question):
     
     return response["output_text"]
 def app():
-    pdf_docs=['Home Loan Information.pdf']
-    if os.path.isdir('faiss_index')==False:
-        raw_text = get_pdf_text(pdf_docs)
-        text_chunk=get_text_chunks(raw_text)
+    user_name = st.session_state.get('user_name')
+    password = st.session_state.get('password')
+    if user_name != "" and password != "":
+        pdf_docs=['Home Loan Information.pdf']
+        if os.path.isdir('faiss_index')==False:
+            raw_text = get_pdf_text(pdf_docs)
+            text_chunk=get_text_chunks(raw_text)
 
-        get_vector_store(text_chunk)
+            get_vector_store(text_chunk)
 
 
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = []
-        initial_message = AIMessage("Hi, how can I help you?")
-        st.session_state.chat_history.append(initial_message)
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = []
+            initial_message = AIMessage("Hi, how can I help you?")
+            st.session_state.chat_history.append(initial_message)
 
-    st.title('Insurance ChatBot')
+        st.title('Insurance ChatBot')
 
-    for message in st.session_state.chat_history:
-        if isinstance(message, HumanMessage):
+        for message in st.session_state.chat_history:
+            if isinstance(message, HumanMessage):
+                with st.chat_message('Human'):
+                    st.markdown(message.content)
+            else:
+                with st.chat_message('AI'):
+                    st.markdown(message.content)
+
+        user_query = st.chat_input('Your message')
+        if user_query:
+            st.session_state.chat_history.append(HumanMessage(user_query))
             with st.chat_message('Human'):
-                st.markdown(message.content)
-        else:
+                st.markdown(user_query)
+
+            ai_response = user_input(user_query)
             with st.chat_message('AI'):
-                st.markdown(message.content)
+                st.markdown(ai_response)
 
-    user_query = st.chat_input('Your message')
-    if user_query:
-        st.session_state.chat_history.append(HumanMessage(user_query))
-        with st.chat_message('Human'):
-            st.markdown(user_query)
-
-        ai_response = user_input(user_query)
-        with st.chat_message('AI'):
-            st.markdown(ai_response)
-
-        st.session_state.chat_history.append(AIMessage(ai_response))
+            st.session_state.chat_history.append(AIMessage(ai_response))
+    else:
+        st.error('Please Login First')
 
 if __name__ == '__main__':
     app()

@@ -23,4 +23,5 @@ pillow
 PyPDF2
 faiss-cpu
 emoji
+mysql-connector-python
 -e .

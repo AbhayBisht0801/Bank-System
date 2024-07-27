@@ -30,7 +30,8 @@ def CreateAccount():
                        R_account_no integer,
                        Rec_amount integer,
                        Bank_bal integer,
-                       S_customer_id Integer
+                       S_customer_id Integer,
+                       is_fraud int
         )""")
 
         c.execute('''CREATE TABLE InsuranceType(
