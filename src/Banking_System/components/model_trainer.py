@@ -3,6 +3,7 @@ import urllib.request as request
 import zipfile
 import gdown
 import pandas as pd
+from pathlib import Path
 from src.Banking_System import logger
 from src.Banking_System.utils.common import get_size
 from src.Banking_System.config.configuration import TrainingConfig

@@ -1,7 +1,6 @@
 import sqlite3 
 from sql import schema
 
-from langchain_community.utilities.sql_database import SQLDatabase
 import google.generativeai as genai
 from dotenv import load_dotenv
 load_dotenv()

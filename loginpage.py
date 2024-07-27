@@ -1,7 +1,6 @@
 import streamlit as st
 import sqlite3 
 from dotenv import load_dotenv
-from langchain_community.utilities import sql_database
 import mysql.connector
 from mysql.connector import Error
 
